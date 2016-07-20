@@ -1,0 +1,2 @@
+# FactorioRecipes
+Analyses factorio recipes
