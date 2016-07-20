@@ -1,0 +1,68 @@
+
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+	google.charts.load('current', {
+	'packages': ['sankey']
+	});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'From');
+	data.addColumn('string', 'To');
+	data.addColumn('number', 'Weight');
+	data.addColumn({type:'string', role:'tooltip'});
+	data.addRows([
+        ['iron-ore', 'iron-plate', 0.137992, '13.8%'],
+        ['copper-ore', 'copper-plate', 0.132098, '13.2%'],
+        ['copper-plate', 'electronic-circuit', 0.108859, '10.9%'],
+        ['water', 'sulfur', 0.076876, '7.7%'],
+        ['petroleum-gas', 'sulfur', 0.076876, '7.7%'],
+        ['iron-plate', 'electronic-circuit', 0.072573, '7.3%'],
+        ['petroleum-gas', 'plastic-bar', 0.057650, '5.8%'],
+        ['iron-plate', 'steel-plate', 0.051426, '5.1%'],
+        ['water', 'sulfuric-acid', 0.051177, '5.1%'],
+        ['electronic-circuit', 'processing-unit', 0.044982, '4.5%'],
+        ['sulfur', 'sulfuric-acid', 0.025589, '2.6%'],
+        ['coal', 'plastic-bar', 0.019217, '1.9%'],
+        ['electronic-circuit', 'advanced-circuit', 0.017814, '1.8%'],
+        ['plastic-bar', 'advanced-circuit', 0.017814, '1.8%'],
+        ['copper-plate', 'advanced-circuit', 0.017814, '1.8%'],
+        ['coal', 'iron-plate', 0.005520, '0.6%'],
+        ['coal', 'copper-plate', 0.005284, '0.5%'],
+        ['iron-plate', 'sulfuric-acid', 0.005118, '0.5%'],
+        ['advanced-circuit', 'processing-unit', 0.004498, '0.4%'],
+        ['sulfuric-acid', 'battery', 0.003992, '0.4%'],
+        ['electronic-circuit', 'solar-panel', 0.003986, '0.4%']
+	]);
+
+	// Sets chart options.
+	var options = {
+		sankey: {
+			node: {
+				width: 15,
+				color: { stroke: 'gray', strokeWidth: 1 },
+				nodePadding: 20,
+				label: { fontSize: 16, bold: true },
+				interactivity: true
+			},
+			link: {
+				colorMode: "source",
+				color: { stroke: '#777', strokeWidth: 1.5 }
+			},
+			iterations: 100
+		},
+	};
+
+	// Instantiates and draws our chart, passing in some options.
+	var chart = new google.visualization.Sankey(document.getElementById('sankey_basic'));
+	chart.draw(data, options);
+	}
+    </script>
+  </head>
+  <body>
+    <div id="sankey_basic" style="width: 100%; height: 100%;"></div>
+  </body>
+</html>
