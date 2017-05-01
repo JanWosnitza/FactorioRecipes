@@ -31,4 +31,6 @@ module LuaType =
         |> Seq.sort
         |> Seq.toList
 
+    let isValue = function | Value x -> true | _ -> false
     let tryValue = function | Value x -> Some x | _ -> None
+    let value = function | Value x -> x | _ -> failwith "not a value"

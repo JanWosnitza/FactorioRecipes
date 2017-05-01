@@ -1,104 +1,131 @@
 ﻿namespace FactorioRecipes
 
-type EntityAmount =
-    {amount:float
-     name:string
-     type':string}
+type EntityAmount = {
+    Amount : float
+    Name : string
+    Type : string
+}
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module EntityAmount =
     let empty =
-        {amount=0.0
-         name=""
-         type'=""}
+        {Amount=0.0
+         Name=""
+         Type=""}
 
     let setValue =
         function
-        | Value [(Float 1.0, String id);
-                 (Float 2.0,Float count)] ->
-            Some {amount = count
-                  name = id
-                  type' = ""}
+        | Value [Float 1.0, String id
+                 Float 2.0, Float count] ->
+            {Amount = count
+             Name = id
+             Type = ""
+            } |> Some
 
-        | Value [(String "amount", Float count);
-                 (String "name", String name);
-                 (String "type", String type')] ->
-            Some {amount = count
-                  name = name
-                  type' = type'}
+        | Value [String "amount", Float count
+                 String "name"  , String name
+                 String "type"  , String type'] ->
+            {Amount = count
+             Name = name
+             Type = type'
+            } |> Some 
 
         | _ -> None
             
 
-type Recipe =
-    {``type``:string
-     name:string
-     subgroup:string
-     category:string option
-     enabled:bool
-     energy_required:float
-     ingredients:EntityAmount list
-     result_count:float
-     hidden:bool
-     result:EntityAmount list }
+type Recipe = {
+    Type : string
+    Name : string
+    Subgroup : string
+    Category : string option
+    Enabled : bool
+    EnergyRequired : float
+    Ingredients : EntityAmount list
+    ResultCount : float
+    Hidden : bool
+    Result : EntityAmount list
+}
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Recipe =
     let empty =
-        {``type`` = ""
-         name = ""
-         subgroup = ""
-         enabled = false
-         category = None
-         energy_required = 0.0
-         ingredients = []
-         result_count = 1.0
-         hidden = false
-         result = [] }
+        {Type = ""
+         Name = ""
+         Subgroup = ""
+         Enabled = false
+         Category = None
+         EnergyRequired = 0.0
+         Ingredients = []
+         ResultCount = 1.0
+         Hidden = false
+         Result = [] }
         
-    let setValue r (x:LuaType*LuaType) =
+    let setValue (r:Recipe) (x:LuaType*LuaType) =
         match x with
         | (String "type", String x) ->
-            {r with ``type``=x}
+            {r with
+                Type = x
+            }
 
         | (String "name", String x) ->
-            {r with name=x}
+            {r with
+                Name = x
+            }
 
         | (String "subgroup", String x) ->
-            {r with subgroup=x}
+            {r with
+                Subgroup = x
+            }
         
         | (String "enabled", Bool x) ->
-            {r with enabled=x}
-        | (String "enabled", String "true") ->
-            {r with enabled=true}
-        | (String "enabled", String "false") ->
-            {r with enabled=false}
-        
+            {r with
+                Enabled = x
+            }
+
+        | (String "enabled", String x) ->
+            {r with
+                Enabled = (x = "true")
+            }
+
         | (String "category", String x) ->
-            {r with category=Some x}
+            {r with
+                Category = Some x
+            }
         
         | (String "energy_required", Float x) ->
-            {r with energy_required=x}
+            {r with
+                EnergyRequired = x
+            }
         
         | (String "ingredients", Value x) ->
-            let i = List.choose (snd >> EntityAmount.setValue) x
-            {r with ingredients=i}
+            {r with
+                Ingredients = List.choose (snd >> EntityAmount.setValue) x
+            }
         
         | (String "result", String x) ->
-            {r with result=[{amount=1.0; name=x; type'=""}]}
+            {r with
+                Result =
+                    [{Amount = 1.0
+                      Name = x
+                      Type = ""
+                    }]
+            }
 
         | (String "results", Value x) ->
-            let res = List.choose (snd >> EntityAmount.setValue) x
-            {r with result=res}
+            {r with
+                Result = List.choose (snd >> EntityAmount.setValue) x
+            }
 
         | (String "result_count", Float x) ->
-            {r with result_count=x}
+            {r with ResultCount = x}
 
         | (String "hidden", Bool x) ->
-            {r with hidden=x}
+            {r with Hidden = x}
 
-        | (String "icon", _) -> r
-        | (String "order", _) -> r
-        | (String "main_product", _) -> r
-        
+        (*
+        | (String "icon", _) ->
+        | (String "order", _) ->
+        | (String "main_product", _) ->
+        *)
+
         | _ -> r

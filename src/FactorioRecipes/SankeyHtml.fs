@@ -2,7 +2,7 @@
 
 open System.IO
 
-let private a =     """
+let private a = """
 <html>
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
